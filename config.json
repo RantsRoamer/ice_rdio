@@ -1,0 +1,23 @@
+{
+  "icecast": {
+    "url": "http://your-icecast-server-url/stream",
+    "username": "your-username",
+    "password": "your-password"
+  },
+  "audio": {
+    "threshold": -20  // Adjust this value as needed for your environment
+  },
+  "rdio_scanner": {
+    "url": "https://other-rdio-scanner.example.com/api/call-upload",
+    "api_key": "d2079382-07df-4aa9-8940-8fb9e4ef5f2e",
+    "frequency": 774031250,
+    "source": 4424000,
+    "system": 11,
+    "systemLabel": "RSP25MTL",
+    "talkgroup": 54241,
+    "talkgroupGroup": "Fire",
+    "talkgroupLabel": "TDB A1",
+    "talkgroupTag": "Fire dispatch"
+  },
+  "log_dir": "/path/to/logs/"
+}
