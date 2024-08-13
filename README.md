@@ -31,8 +31,8 @@ Ice-Rdio is an audio streaming application that captures audio from an IceCast s
 2. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/your-username/ice-rdio.git
-   cd ice-rdio
+   git clone https://github.com/RantsRoamer/ice_rdio.git
+   cd ice_rdio
    ```
 
 3. **Install Python Dependencies**
