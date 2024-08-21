@@ -62,7 +62,7 @@ def trim_leading_silence(audio_segment, silence_thresh=-40.0, chunk_size=10):
     return audio_segment
 
 def capture_audio(config, debug=False):
-    while True:
+    while True:  # Outer loop for constant reconnection attempts
         try:
             logging.info("Attempting to connect to IceCast stream...")
             response = requests.get(
@@ -83,11 +83,11 @@ def capture_audio(config, debug=False):
                 logging.info(f"Using temporary file {temp_audio_file.name} for audio capture.")
 
                 # Read stream in larger chunks
-                for chunk in response.iter_content(chunk_size=32768):  # Further increased chunk size
+                for chunk in response.iter_content(chunk_size=32768):
                     buffer.write(chunk)
                     
                     # Only attempt to process if we have enough data
-                    if buffer.tell() >= 65536:  # Further increase to ensure complete audio segments
+                    if buffer.tell() >= 65536:
                         audio_segment = process_audio(buffer, config, debug)
 
                         if audio_segment:
@@ -112,15 +112,23 @@ def capture_audio(config, debug=False):
                             logging.info(f"Using new temporary file {temp_audio_file.name} for audio capture.")
 
                         buffer = io.BytesIO()  # Reset buffer for next segment
+
             else:
                 logging.error(f"Failed to connect to IceCast stream: {response.status_code}")
-                break  # Exit the loop if connection fails due to server response
+                # Exit the inner loop and retry connection after a delay
+                break
 
         except requests.exceptions.RequestException as e:
             logging.error(f"Connection error: {e}. Attempting to reconnect in 5 seconds...")
             time.sleep(5)  # Wait before attempting to reconnect
+        
         except Exception as e:
             logging.error(f"An error occurred: {e}")
+
+        # Reconnect after a failed connection or error
+        logging.info("Retrying connection...")
+        time.sleep(5)  # Delay before reconnecting
+
 
 def process_audio_file(audio_file_path, config):
     try:
