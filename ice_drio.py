@@ -113,6 +113,11 @@ def capture_audio(config, debug=False):
 
                         buffer = io.BytesIO()  # Reset buffer for next segment
 
+            elif response.status_code == 404:
+                logging.error("404 Not Found: The IceCast stream URL is incorrect or the stream is not available. Attempting to reconnect...")
+                time.sleep(5)  # Wait before attempting to reconnect
+                continue  # Skip to the next iteration to reconnect
+
             else:
                 logging.error(f"Failed to connect to IceCast stream: {response.status_code}")
                 # Exit the inner loop and retry connection after a delay
